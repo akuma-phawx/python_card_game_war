@@ -117,6 +117,20 @@ def compare_values(card_one, card_two):
     return card_one.value - card_two.value
 
 
+def check_for_winner(p1_cards, p2_cards):
+    '''
+        Checks if theres a winner and who is the winner
+        Returns a tuple of structure (game is over, winner string)
+    '''
+
+    if p1_cards == 0:
+        return (True, 'Player 2')
+    elif p2_cards == 0:
+        return (True, 'Player 1')
+    else:
+        return (False, None)
+
+
 def start_game(deck, player_one, player_two):
     '''
        Starts the game
@@ -137,9 +151,9 @@ def start_game(deck, player_one, player_two):
                     player_one_drawn_card = player_one.draw_card()
                     player_two_drawn_card = player_two.draw_card()
                     print(
-                        f'P1 [{player_one.name}] draw : {player_one_drawn_card}')
+                        f'\tP1 [{player_one.name}] draw : {player_one_drawn_card}')
                     print(
-                        f'P1 [{player_two.name}] draw : {player_two_drawn_card}')
+                        f'\tP1 [{player_two.name}] draw : {player_two_drawn_card}')
 
                     stash.append(player_one_drawn_card)
                     stash.append(player_two_drawn_card)
@@ -147,23 +161,29 @@ def start_game(deck, player_one, player_two):
                     comparison_result = compare_values(player_one_drawn_card,
                                                        player_two_drawn_card)
                     if(comparison_result > 0):
-                        print('Player One wins!')
+                        print('Player One wins!\n')
                         player_one.add_cards(stash)
                         stash = []
                     elif(comparison_result < 0):
-                        print('Player Two wins!')
+                        print('Player Two wins!\n')
                         player_two.add_cards(stash)
                         stash = []
                     else:
-                        print('huhu')
+                        print(
+                            f'Cards added in the stash. We are at War!\n Cards in stash: {len(stash)} ')
+
+                    game_over, winner = check_for_winner(
+                        len(player_one.card_list), len(player_two.card_list))
                 elif(user_input == '2'):
                     print('\n', player_one, '\n')
                     print('\n', player_two, '\n')
+                    print('\n', f'Cards in stash {len(stash)}', '\n')
                 else:
                     exit()
         except ValueError or TypeError:
             print('\nNot a valid choice. Try again.\n')
             continue
+    print(f'Congratulations {winner} - You won!!')
 
 
 if __name__ == "__main__":
